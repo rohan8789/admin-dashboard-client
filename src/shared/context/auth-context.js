@@ -5,6 +5,8 @@ export const AuthContext = createContext({
   isLoggedIn: false,
   token: null,
   uid: null,
+  siteData:"",
+  staticPage:"",
   login: () => {},
   logout: () => {},
 });
@@ -14,7 +16,7 @@ export const AuthProvider = ({ children }) => {
   const [resetToken, setResetToken] = useState(null);
   const [uid, setUId] = useState(null);
   const [siteData, setSiteData] = useState();
-  // let siteData = useRef();
+  const [staticPage, setStaticPage] = useState([]);
 
   const login = useCallback((uid, token) => {
     setToken(token);
@@ -35,19 +37,36 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("ResetToken", JSON.stringify({userId:uid, rToken:rToken}))
   })
   
-  const id = localStorage.getItem("siteDataId");
   useEffect(() => { 
     const sendRequest = async () => {
       try {
-        let res;
-        if (id)res = await axios.get(`http://localhost:8000/api/admin/setting/general-setting/${id}`);
+        let res = await axios.get(`http://localhost:8000/api/admin/settings/general-settings/site-information`);
         setSiteData(res?.data?.data);
-        localStorage.setItem("logoData", res?.data?.data?.logo);
-        console.log("hii")
-      } catch (err) {}
+        if(siteData)console.log(staticPage, siteData);
+        else console.log("I am sorry");
+      } catch (err) {
+        console.log("err1",err);
+      }
     };
     sendRequest();
-  },[id]);
+  },[]);
+
+
+  useEffect(() => { 
+    const sendRequest = async () => {
+      try {
+        let res2 = await axios.get(`http://localhost:8000/api/admin/settings/general-settings/static-pages`);
+        setStaticPage(res2?.data?.static_data);
+        if(staticPage)console.log(staticPage, siteData, res2?.data?.static_data);
+        else console.log("I am sorry");
+      } catch (err) {
+        console.log("err2",err);
+      }
+    };
+    sendRequest();
+  },[]);
+
+  
 
   
   return (
@@ -58,6 +77,7 @@ export const AuthProvider = ({ children }) => {
         resetToken,
         uid,
         siteData,
+        staticPage,
         login,
         logout,
         Reset,

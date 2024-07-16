@@ -11,19 +11,20 @@ import UserPreferencesPage from './admin/profile/UserPreferencesPage'
 import AdminBlankPage from './admin/pages/AdminBlankPage';
 import AuthLayout from './admin/auth/AuthLayout';
 import { AuthContext } from './shared/context/auth-context';
-import GeneralSetting from './admin/pages/setting/GeneralSetting';
+import StaticPages from './admin/pages/setting/static/StaticPages';
+import SiteInformation from './admin/pages/setting/general/SiteInformation';
 
 import 'font-awesome/css/font-awesome.min.css';
 import './assets/css/app.css';
+import AddUser from './admin/pages/roles-and-permissions/AddUser';
 
 function App() {
-    //const [siteData, setSiteData] = useState();
     const auth = useContext(AuthContext);
-    
+    // console.log("Newest context", auth)
     useEffect(()=>{
         const data = JSON.parse(localStorage.getItem('userData'));
         const resetToken = JSON.parse(localStorage.getItem('ResetToken'));
-        console.log("This is reset token", resetToken);
+        // console.log("This is reset token", resetToken);
         if(data?.token && data?.userId){
             auth.login(data?.userId, data?.token);
         }
@@ -62,7 +63,9 @@ function App() {
             <>
               <Route exact path="/" element={<DashboardPage />} />
               <Route exact path="/profile" element={<ProfilePage />} />
-              <Route exact path="/settings/general-settings" element={<GeneralSetting />}/>
+              <Route exact path="/roles-and-permissions/add-user" element={<AddUser/>}/>
+              <Route exact path="/settings/general-settings/site-information" element={<SiteInformation />}/>
+              <Route exact path="/settings/general-settings/static-pages" element={<StaticPages/>}/>
               <Route exact path="/change-password/:userId" element={<ChangePasswordPage />}/>
               <Route exact path="/preferences" element={<UserPreferencesPage />}/>
               <Route exact path="/typography" element={<TypographyPage />} />

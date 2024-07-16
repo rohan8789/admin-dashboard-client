@@ -4,14 +4,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "react-bootstrap";
 
-import LoadingState from "../../../shared/UIElements/LoadingState";
-import { validate } from "../../../shared/utils/validator";
-import ModalComponent from "../../../shared/UIElements/ModalComponent";
-import EditGeneralSetting from "./EditGeneralSetting";
-import { AuthContext } from "../../../shared/context/auth-context";
-import EditProfile from "../../profile/EditProfile";
+import LoadingState from "../../../../shared/UIElements/LoadingState";
+import { validate } from "../../../../shared/utils/validator";
+import ModalComponent from "../../../../shared/UIElements/ModalComponent";
+import EditGeneralSetting from "./EditSiteInformation";
+import { AuthContext } from "../../../../shared/context/auth-context";
 
-const GeneralSetting = () => {
+const SiteInformation = () => {
   const auth = useContext(AuthContext);
   const [data, setData] = useState({
     title: "",
@@ -27,7 +26,7 @@ const GeneralSetting = () => {
     m_mode: "",
     i_mode: "",
   });
-  
+
   console.log("This is our new authContext", auth.siteData);
   const handleChange = (e) => {
     let name = e.target.name;
@@ -57,18 +56,17 @@ const GeneralSetting = () => {
       formData.append("m_mode", data.m_mode);
       formData.append("i_mode", data.i_mode);
       const res = await axios.post(
-        "http://localhost:8000/api/admin/setting/general-setting",
+        "http://localhost:8000/api/admin/settings/general-settings/site-information",
         formData
       );
-     
+
       window.location.reload();
-      if (res) localStorage.setItem("siteDataId", res?.data?.createdData?._id);
       console.log(res);
     } catch (err) {
       console.log(err);
     }
   };
-  
+
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form values are: ", data);
@@ -88,9 +86,10 @@ const GeneralSetting = () => {
       err.m_mode === "" &&
       err.i_mode === ""
     ) {
-       console.log("please yaar");
+      // console.log("please yaar");
       sendRequest();
     } else {
+      // console.log("fck, this executed...")
       err.title = "";
       err.logo = null;
       err.f_icon = null;
@@ -100,10 +99,8 @@ const GeneralSetting = () => {
     console.log("errs are: ", err);
   };
 
-    
-
   const modalContent = () => {
-    return <EditGeneralSetting data = {auth.siteData} />;
+    return <EditGeneralSetting data={auth.siteData} />;
   };
 
   if (!auth.siteData) {
@@ -124,6 +121,7 @@ const GeneralSetting = () => {
                     placeholder="Title"
                     name="title"
                     onChange={handleChange}
+                    value={data.title}
                   />
                 </div>
                 {error.title ? (
@@ -132,8 +130,8 @@ const GeneralSetting = () => {
                   ""
                 )}
               </div>
-              </div>
-              <div className="row">
+            </div>
+            <div className="row">
               <div className="col">
                 <label htmlFor="logo" className="form-label">
                   Logo
@@ -222,100 +220,88 @@ const GeneralSetting = () => {
         </div>
       </div>
     );
-  }else {
-    
-return (
-  <div className="col-sm-8 m-5 p-5" style={{ width: "75vw" }}>
-    <div class="card-block w-100 h-100 mt-5 border">
-      <h1 className="text-center mt-4">Site Information</h1>
-      <div class="user-profile container me-5">
-        <div className="mt-3 p-3">
-          <div className="row details w-100 ms-1">
-            <h1 className="text-center">
-              Title: <span>{auth.siteData?.title}</span>{" "}
-            </h1>
-            <div className="row details mt-4 w-100 ms-1 d-flex justify-content-around">
-              <div class="card" style={{ width: "18rem" }}>
-                <img
-                  class="card-img-top mt-2"
-                  src={"http://localhost:8000/" + auth.siteData?.logo}
-                  alt="Card image cap"
-                  width="32"
-                  height="132"
-                />
-                <div class="card-body">
-                  <h5 class="card-title text-center">Logo</h5>
+  } else {
+    return (
+      <div className="col-sm-8 m-5 p-5" style={{ width: "75vw" }}>
+        <div class="card-block w-100 h-100 mt-5 border">
+          <h1 className="text-center mt-4">Site Information</h1>
+          <div class="user-profile container me-5">
+            <div className="mt-3 p-3">
+              <div className="row details w-100 ms-1">
+                <h1 className="text-center">
+                  Title: <span>{auth.siteData?.title}</span>{" "}
+                </h1>
+                <div className="row details mt-4 w-100 ms-1 d-flex justify-content-around">
+                  <div class="card" style={{ width: "18rem" }}>
+                    <img
+                      class="card-img-top mt-2"
+                      src={"http://localhost:8000/" + auth.siteData?.logo}
+                      alt="Card image cap"
+                      width="32"
+                      height="132"
+                    />
+                    <div class="card-body">
+                      <h5 class="card-title text-center">Logo</h5>
+                    </div>
+                  </div>
+
+                  <div class="card" style={{ width: "18rem" }}>
+                    <img
+                      class="card-img-top mt-2"
+                      src={"http://localhost:8000/" + auth.siteData?.f_icon}
+                      alt="Card image cap"
+                      width="32"
+                      height="132"
+                    />
+                    <div class="card-body">
+                      <h5 class="card-title text-center">Fav-Icon</h5>
+                    </div>
+                  </div>
+                </div>
+                <div className="row details mt-4 w-100 ms-1 d-flex justify-content-around">
+                  <div className="col m-2">
+                    <strong className="d-block pb-1 text-center">
+                      Maintainance Mode:
+                    </strong>
+                    <span className="d-block text-center">
+                      {auth.siteData?.m_mode}
+                    </span>
+                  </div>
+
+                  <div className="col m-2">
+                    <strong className="d-block pb-1 text-center">
+                      Instance Mode:{" "}
+                    </strong>
+                    <span className="d-block text-center">
+                      {auth.siteData?.i_mode}
+                    </span>
+                  </div>
                 </div>
               </div>
 
-              <div class="card" style={{ width: "18rem" }}>
-                <img
-                  class="card-img-top mt-2"
-                  src={"http://localhost:8000/" + auth.siteData?.f_icon}
-                  alt="Card image cap"
-                  width="32"
-                  height="132"
-                />
-                <div class="card-body">
-                  <h5 class="card-title text-center">Fav-Icon</h5>
-                </div>
+              <div className="row details  d-flex justify-content-center mt-4">
+                <Button
+                  variant="primary w-25"
+                  data-bs-toggle="modal"
+                  data-bs-target="#exampleModalDefault"
+                  //  onClick={handleEdit}
+                >
+                  <FontAwesomeIcon icon={faEdit} /> Edit
+                </Button>
               </div>
             </div>
-            <div className="row details mt-4 w-100 ms-1 d-flex justify-content-around">
-              <div className="col m-2">
-                <strong className="d-block pb-1 text-center">
-                  Maintainance Mode:
-                </strong>
-                <span className="d-block text-center">
-                  {auth.siteData?.m_mode}
-                </span>
-              </div>
-
-              <div className="col m-2">
-                <strong className="d-block pb-1 text-center">
-                  Instance Mode:{" "}
-                </strong>
-                <span className="d-block text-center">
-                  {auth.siteData?.i_mode}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div className="row details  d-flex justify-content-center mt-4">
-            <Button
-              variant="primary w-25"
-              data-bs-toggle="modal"
-              data-bs-target="#exampleModalDefault"
-              //  onClick={handleEdit}
-            >
-              <FontAwesomeIcon icon={faEdit} /> Edit
-            </Button>
           </div>
         </div>
+        <ModalComponent
+          title="Default Modal"
+          content={modalContent()}
+          //  dataBsBackdrop="static"
+          id="exampleModalDefault"
+        />
       </div>
-    </div>
-    <ModalComponent
-      title="Default Modal"
-      content={modalContent()}
-      //  dataBsBackdrop="static"
-      id="exampleModalDefault"
-    />
-  </div>
-);
-
-
-
-
+    );
   }
 };
 
-export default LoadingState(GeneralSetting);
+export default LoadingState(SiteInformation);
 
-
-
-/*
-
-
-
-*/

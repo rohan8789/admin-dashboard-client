@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { validate } from "../../../shared/utils/validator";
+import { validate } from "../../../../shared/utils/validator";
 import axios from "axios";
 
-const EditGeneralSetting = ({ data }) => {
-  console.log("Dataaa", data.title)
+const EditSiteInformation = ({ data }) => {
+  console.log("Dataaa", data.title);
   const [sdata, setsData] = useState({
-    title: data?.title|| "",
+    title: data?.title || "",
     logo: null,
     f_icon: null,
     m_mode: data?.m_mode || "",
@@ -48,10 +48,10 @@ const EditGeneralSetting = ({ data }) => {
       formData.append("m_mode", sdata.m_mode);
       formData.append("i_mode", sdata.i_mode);
       const res = await axios.post(
-        "http://localhost:8000/api/admin/setting/general-setting",
+        "http://localhost:8000/api/admin/settings/general-settings/site-information",
         formData
       );
-      if (res) localStorage.setItem("siteDataId", res?.data?.createdData?._id);
+      window.location.reload();
       console.log(res);
     } catch (err) {
       console.log(err);
@@ -87,7 +87,6 @@ const EditGeneralSetting = ({ data }) => {
     }
     console.log("errs are: ", err);
   };
-
 
   return (
     <>
@@ -171,7 +170,7 @@ const EditGeneralSetting = ({ data }) => {
               <img
                 src={
                   data?.logo
-                    ? "http://localhost:8000/" + data?.logo
+                    ? "http://localhost:8000/" + data?.f_icon
                     : "https://via.placeholder.com/150"
                 }
                 alt=""
@@ -236,4 +235,4 @@ const EditGeneralSetting = ({ data }) => {
   );
 };
 
-export default EditGeneralSetting;
+export default EditSiteInformation;

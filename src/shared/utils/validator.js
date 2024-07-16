@@ -1,4 +1,5 @@
 let error = {
+  name:"",
   fname: "",
   lname: "",
   email: "",
@@ -6,16 +7,24 @@ let error = {
   phno: "",
   dob: "",
   image: null,
-  currPassword:"",
+  currPassword: "",
   password: "",
   repassword: "",
   captcha: "",
 
-  title:"",
-  logo:null,
-  f_icon:null,
-  m_mode:"",
-  i_mode:""
+  title: "",
+  logo: null,
+  f_icon: null,
+  m_mode: "",
+  i_mode: "",
+
+  heading: "",
+  description: "",
+  slugurl: "",
+  redirecturl: "",
+  redirect_mode: "",
+
+  role:""
 };
 function validateInput(prop, value) {
   const emailRegex = /^\S+@\S+\.\S+$/;
@@ -23,7 +32,17 @@ function validateInput(prop, value) {
   const nameRegex = /^[a-zA-Z-' ]+$/;
   const titleRegex = /^[a-zA-Z0-9\s,.#'"/-]+$/;
   const currDate = new Date();
-  // console.log(prop, value)
+
+  //console.log("validate",prop, value, value.length)
+
+  if (prop === "name") {
+    if (value.length === 0) error.name = `Please provide your ${prop}`;
+    else if (value.length <= 1) error.name = `${prop} is too short`;
+    else if (value.length > 15) error.name = `${prop} is too long`;
+    else if (nameRegex.test(value) === false)
+      error.name = `Only letters, spaces, hyphens, and apostrophes allowed.`;
+  }
+
   if (prop === "fname") {
     if (value.length === 0) error.fname = `Please provide your ${prop}`;
     else if (value.length <= 1) error.fname = `${prop} is too short`;
@@ -86,13 +105,11 @@ function validateInput(prop, value) {
   if (prop === "captcha")
     if (value.length === 0) error.captcha = `Please enter a valid captcha.`;
 
-
   if (prop === "currPassword") {
     if (value.length === 0) error.currPassword = `Please Enter your ${prop}`;
     else if (passwordRegex.test(value) === false)
       error.currPassword = `${prop} should have atleast 6 character, one uppercase letter, one digit, one special character`;
   }
-
 
   if (prop === "password") {
     if (value.length === 0) error.password = `Please Enter your ${prop}`;
@@ -109,6 +126,8 @@ function validateInput(prop, value) {
 
 
 
+
+  //site-information-validation
   if (prop === "title") {
     if (value.length === 0) error.title = `Please provide a ${prop}`;
     else if (value.length <= 2) error.title = `${prop} is too short`;
@@ -133,16 +152,53 @@ function validateInput(prop, value) {
       error.f_icon = "image size should be less than 500kb";
   }
 
-  if(prop === "m_mode"){
-    if(value.length === 0)error.m_mode = "Please select some value";
+  if (prop === "m_mode") {
+    if (value.length === 0) error.m_mode = "Please select some value";
   }
-  if(prop === "i_mode"){
-    if(value.length === 0)error.i_mode = "Please select some value";
+
+  if (prop === "i_mode") {
+    if (value.length === 0) error.i_mode = "Please select some value";
   }
+
+  if (prop === "role") {
+    if (value.length === 0) error.role = "Please select some value";
+  }
+
+
+
+
+
+  //static pages validation
+
+  if (prop === "heading") {
+    if (value.length === 0) error.heading = `Please provide ${prop}`;
+    else if (value.length <= 5) error.heading = `${prop} is too short`;
+    else if (value.length > 400) error.heading = `${prop} is too long`;
+  }
+
+  if (prop === "description") {
+    if (value.length === 0) error.description = `Please provide ${prop}`;
+    else if (value.length <= 10) error.description = `${prop} is too short`;
+    else if (value.length > 400) error.description = `${prop} is too long`;
+  }
+
+  if(prop === "slugurl") {
+    if(value.length===0)error.slugurl=`Please provide slug url`;
+  }
+
+  if (prop === "redirecturl") {
+    if (value.length===0) error.redirecturl = `Please provide redirect url`;
+  }
+
+  if (prop === "redirect_mode") {
+    if (value.length === 0) error.redirect_mode = "Please select some value";
+  }
+
 
 }
 
 export const validate = (values) => {
+  //console.log("Validate", values)
   if (values.fname !== undefined) validateInput("fname", values.fname);
   if (values.lname !== undefined) validateInput("lname", values.lname);
   if (values.email !== undefined) validateInput("email", values.email);
@@ -155,10 +211,22 @@ export const validate = (values) => {
   if (values.password !== undefined) validateInput("password", values.password);
   if (values.repassword !== undefined) validateInput("repassword", values.repassword);
 
-  if(values.title !== undefined) validateInput("title", values.title);
-  if(values.logo !== undefined) validateInput("logo", values.logo);
-  if(values.f_icon !== undefined) validateInput("f_icon", values.f_icon);
-  if(values.m_mode !== undefined) validateInput("m_mode", values.m_mode);
-  if(values.i_mode !== undefined)validateInput("i_mode", values.i_mode);
+  //site information
+  if (values.title !== undefined) validateInput("title", values.title);
+  if (values.logo !== undefined) validateInput("logo", values.logo);
+  if (values.f_icon !== undefined) validateInput("f_icon", values.f_icon);
+  if (values.m_mode !== undefined) validateInput("m_mode", values.m_mode);
+  if (values.i_mode !== undefined) validateInput("i_mode", values.i_mode);
+
+  //static pages
+  if (values.heading !== undefined) validateInput("heading", values.heading);
+  if (values.description !== undefined) validateInput("description", values.description);
+  if (values.slugurl !== undefined) validateInput("slugurl", values.slugurl);
+  if (values.redirecturl !== undefined) validateInput("redirecturl", values.redirecturl);
+  if (values.redirect_mode !== undefined) validateInput("redirect_mode", values.redirect_mode);
+
+  //add user
+  if (values.name !== undefined) validateInput("name", values.name);
+  if (values.role !== undefined) validateInput("role", values.role);
   return error;
 };

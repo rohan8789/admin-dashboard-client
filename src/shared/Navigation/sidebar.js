@@ -15,8 +15,7 @@ const Sidebar = () => {
     auth.logout();
     navigate("/login");
   };
-  const logoData = localStorage.getItem("logoData");
-  
+
   useEffect(() => {
     const sendRequest = async () => {
       try {
@@ -32,10 +31,9 @@ const Sidebar = () => {
     sendRequest();
   }, [auth?.uid]);
 
-  if(image){
+  if (image) {
     console.log("Hellow", image);
   }
-
 
   return (
     <div
@@ -48,7 +46,11 @@ const Sidebar = () => {
         <Link to="/">
           <img
             alt="Alt content"
-            src={logoData ?'http://localhost:8000/'+logoData : require("../../assets/images/logo.jpg")}
+            src={
+              auth.siteData
+                ? "http://localhost:8000/" + auth.siteData?.logo
+                : require("../../assets/images/logo.jpg")
+            }
             width={165}
             height={60}
           />
@@ -61,7 +63,7 @@ const Sidebar = () => {
               <i className="fa fa-dashboard"></i> Dashboard
             </Link>
           </li>
-          <li className="mb-1">
+          {/* <li className="mb-1">
             <Link className="" to="/blank-page">
               <i className="fa fa-file-o"></i> Blogs
             </Link>
@@ -70,9 +72,9 @@ const Sidebar = () => {
             <Link className="" to="/blank-page">
               <i className="fa fa-file-o"></i> Jobs
             </Link>
-          </li>
+          </li> */}
           {/* <li className="border-top my-3"></li> */}
-          <hr />
+          <hr/>
           <li className="mb-1">
             <button
               className="btn btn-toggle align-items-center rounded collapsed"
@@ -80,16 +82,64 @@ const Sidebar = () => {
               data-bs-target="#dashboard-collapse"
               aria-expanded="false"
             >
-              Settings
+              Roles & permissions
             </button>
             <div className="collapse" id="dashboard-collapse">
               <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                 <li>
-                  <Link to="/settings/general-settings" className="rounded">
-                    General settings
+                  <Link to="/roles-and-permissions/add-user" className="rounded">
+                    Add User
                   </Link>
                 </li>
+                <li>
+                  <a href="#" className="rounded">
+                    View User
+                  </a>
+                </li>
               </ul>
+            </div>
+          </li>
+          <hr />
+          <li className="mb-1">
+            <button
+              className="btn btn-toggle align-items-center rounded collapsed"
+              data-bs-toggle="collapse"
+              data-bs-target="#settings-collapse"
+              aria-expanded="false"
+            >
+              Settings
+            </button>
+            <div className="collapse" id="settings-collapse">
+              <li className="mb-1">
+                <button
+                  className="btn btn-toggle align-items-center rounded collapsed"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#general-settings-collapse"
+                  aria-expanded="false"
+                >
+                  General Settings
+                </button>
+                <div className="collapse" id="general-settings-collapse">
+                  <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li>
+                      <Link
+                        to="/settings/general-settings/site-information"
+                        className="rounded"
+                      >
+                        Site Information
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/settings/general-settings/static-pages"
+                        className="rounded"
+                      >
+                        Static Pages
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+              </li>
             </div>
           </li>
           <hr />
