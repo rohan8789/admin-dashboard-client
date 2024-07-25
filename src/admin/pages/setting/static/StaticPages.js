@@ -10,6 +10,7 @@ import EditStaticPage from "./EditStaticPage";
 const StaticPages = () => {
   const auth = useContext(AuthContext);
   const [sData, setSData] = useState();
+  const [sid, setSid] = useState()
   const [data, setData] = useState({
     heading: "",
     description: "",
@@ -40,19 +41,21 @@ const StaticPages = () => {
         [name]: "",
       };
     });
-    //   console.log(name, value);
   };
 
   const sendRequest = async () => {
     try {
       console.log("SendRequest", data);
-      const res = await axios.post("http://localhost:8000/api/admin/settings/general-settings/static-pages", {
+      const res = await axios.post(
+        "http://localhost:8000/api/admin/settings/general-settings/static-pages",
+        {
           heading: data?.heading,
           description: data?.description,
           slugurl: data?.slugurl,
           redirecturl: data?.redirecturl,
           redirect_mode: data?.redirect_mode,
-      });
+        }
+      );
       window.location.reload();
     } catch (err) {
       console.log(err);
@@ -76,7 +79,6 @@ const StaticPages = () => {
       err.redirecturl === "" &&
       err.redirect_mode === ""
     ) {
-      // console.log("please yaar");
       sendRequest();
     } else {
       err.heading = "";
@@ -88,25 +90,47 @@ const StaticPages = () => {
   };
 
   const modalContent = (arr, id) => {
-    // console.log("m cryin",arr, id)
     return (
       <>
         <EditStaticPage sData={arr} id={id} />
       </>
     );
-  }
+  };
 
-   const modalContent1 = (id) => {
-     // console.log("m cryin",arr, id)
-     return (
-       <>
-         <h1>Do you want to delete this page...</h1>
-         <button className="mt-5 p-2 ps-3 pe-3 fw-bold btn btn-primary" onClick={(e) => handleDelete(data?._id)}>Delete</button>
-       </>
-     );
-   };
+  const handleEdit = (arr, id) => {
+    const a = arr.filter((u) => {
+      return u._id === id;
+    });
+    setSData(a[0]);
+  };
 
-   const modalContent3 = () =>{
+
+
+  const modalContent1 = () => {
+    const handleDelete = async () => {
+      try {
+        if (sid){
+          await axios.delete(`http://localhost:8000/api/admin/settings/general-settings/static-pages/${sid}`);
+        }
+        window.location.reload();
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    return (
+      <>
+        <h1>Do you want to delete this page...</h1>
+        <button
+          className="mt-5 p-2 ps-3 pe-3 fw-bold btn btn-primary"
+          onClick={handleDelete}
+        >
+          Delete
+        </button>
+      </>
+    );
+  };
+
+  const modalContent3 = () => {
     return (
       <div className="d-flex justify-content-center align-content-center">
         <div className="my-3 p-3 bg-body rounded shadow-sm w-75">
@@ -116,7 +140,10 @@ const StaticPages = () => {
           <form onSubmit={handleSubmit}>
             <div className="row">
               <div className="col">
-                <label htmlFor="title" className="d-block form-label text-start">
+                <label
+                  htmlFor="title"
+                  className="d-block form-label text-start"
+                >
                   Heading
                 </label>
                 <div className="input-group mb-3">
@@ -159,51 +186,60 @@ const StaticPages = () => {
                 )}
               </div>
               <div className="row">
-              <div className="col">
-                <label htmlFor="slugurl" className="d-block form-label text-start">
-                  Slug URL
-                </label>
-                <div className="input-group mb-3">
-                  <input
-                    type="url"
-                    className="form-control"
-                    placeholder="http://www.example.com"
-                    name="slugurl"
-                    onChange={handleChange}
-                    value={data.slugurl}
-                  />
+                <div className="col">
+                  <label
+                    htmlFor="slugurl"
+                    className="d-block form-label text-start"
+                  >
+                    Slug URL
+                  </label>
+                  <div className="input-group mb-3">
+                    <input
+                      type="url"
+                      className="form-control"
+                      placeholder="http://www.example.com"
+                      name="slugurl"
+                      onChange={handleChange}
+                      value={data.slugurl}
+                    />
+                  </div>
+                  {error.slugurl ? (
+                    <p style={{ color: "red" }}>{error.slugurl}</p>
+                  ) : (
+                    ""
+                  )}
                 </div>
-                {error.slugurl ? (
-                  <p style={{ color: "red" }}>{error.slugurl}</p>
-                ) : (
-                  ""
-                )}
-              </div>
               </div>
               <div className="row">
-              <div className="col">
-                <label htmlFor="redirecturl" className="d-block form-label text-start">
-                  Redirect URL
-                </label>
-                <div className="input-group mb-3">
-                  <input
-                    type="url"
-                    className="form-control"
-                    placeholder="http://www.example.com"
-                    name="redirecturl"
-                    onChange={handleChange}
-                    value={data.redirecturl}
-                  />
+                <div className="col">
+                  <label
+                    htmlFor="redirecturl"
+                    className="d-block form-label text-start"
+                  >
+                    Redirect URL
+                  </label>
+                  <div className="input-group mb-3">
+                    <input
+                      type="url"
+                      className="form-control"
+                      placeholder="http://www.example.com"
+                      name="redirecturl"
+                      onChange={handleChange}
+                      value={data.redirecturl}
+                    />
+                  </div>
+                  {error.redirecturl ? (
+                    <p style={{ color: "red" }}>{error.redirecturl}</p>
+                  ) : (
+                    ""
+                  )}
                 </div>
-                {error.redirecturl ? (
-                  <p style={{ color: "red" }}>{error.redirecturl}</p>
-                ) : (
-                  ""
-                )}
-              </div>
               </div>
               <div className="col">
-                <label htmlFor="redirect_mode" className="d-block form-label text-start">
+                <label
+                  htmlFor="redirect_mode"
+                  className="d-block form-label text-start"
+                >
                   Redirection mode
                 </label>
                 <div className="input-group mb-3">
@@ -231,22 +267,13 @@ const StaticPages = () => {
         </div>
       </div>
     );
-   }
+  };
 
-  const handleEdit = (e, arr, id) =>{
-    const a = arr.filter((u)=>{
-      return u._id === id;
-    })
-    setSData(a[0]);
-  }
-
-  const handleDelete = (e, id) =>{
-    console.log("let me handle this bitch")
-  }
   
 
+  
 
-  if (auth.staticPage.length!==0) {
+  if (auth.staticPage.length !== 0) {
     return (
       <>
         <div className="table-container w-100 mt-5">
@@ -316,9 +343,7 @@ const StaticPages = () => {
                                   className="dropdown-item"
                                   data-bs-toggle="modal"
                                   data-bs-target="#exampleModalDefault"
-                                  onClick={(e) =>
-                                    handleEdit(e, auth.staticPage, data?._id)
-                                  }
+                                  onClick={(e) => handleEdit(auth.staticPage, data?._id)}
                                 >
                                   <i
                                     className="fa fa-pencil"
@@ -334,6 +359,7 @@ const StaticPages = () => {
                                   className="dropdown-item text-danger"
                                   data-bs-toggle="modal"
                                   data-bs-target="#exampleModalDefault2"
+                                  onClick={()=>{setSid(data?._id)}}
                                 >
                                   <i
                                     className="fa fa-trash"
@@ -351,7 +377,7 @@ const StaticPages = () => {
                             />
                             <ModalComponent
                               title="Delete Modal"
-                              content={modalContent1(data?._id)}
+                              content={modalContent1()}
                               id="exampleModalDefault2"
                               dataBsBackdrop="static"
                             />

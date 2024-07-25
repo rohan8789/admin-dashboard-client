@@ -24,12 +24,15 @@ let error = {
   redirecturl: "",
   redirect_mode: "",
 
-  role:""
+  role:"",
+  type:"",
+  worktype:"",
+  designation:""
 };
 function validateInput(prop, value) {
   const emailRegex = /^\S+@\S+\.\S+$/;
   const passwordRegex = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
-  const nameRegex = /^[a-zA-Z-' ]+$/;
+  const nameRegex = /^[0-9a-zA-Z-' ]+$/;
   const titleRegex = /^[a-zA-Z0-9\s,.#'"/-]+$/;
   const currDate = new Date();
 
@@ -195,6 +198,18 @@ function validateInput(prop, value) {
   }
 
 
+  //news 
+  if(prop === "type"){
+    if(value.length === 0)error.type = "Please select some value";
+  }
+  
+  if (prop === "worktype") {
+    if (value.length === 0) error.worktype = "Please select some value";
+  }
+
+  if (prop === "designation") {
+    if (value.length === 0) error.designation = "Please select some value";
+  }
 }
 
 export const validate = (values) => {
@@ -228,5 +243,11 @@ export const validate = (values) => {
   //add user
   if (values.name !== undefined) validateInput("name", values.name);
   if (values.role !== undefined) validateInput("role", values.role);
+
+
+  //add news
+  if (values.type !== undefined) validateInput("type", values.type);
+  if (values.worktype !== undefined) validateInput("worktype", values.worktype);
+  if (values.designation !== undefined) validateInput("designation", values.designation);
   return error;
 };

@@ -63,38 +63,134 @@ const Sidebar = () => {
               <i className="fa fa-dashboard"></i> Dashboard
             </Link>
           </li>
-          {/* <li className="mb-1">
-            <Link className="" to="/blank-page">
-              <i className="fa fa-file-o"></i> Blogs
-            </Link>
-          </li>
-          <li className="mb-1">
-            <Link className="" to="/blank-page">
-              <i className="fa fa-file-o"></i> Jobs
-            </Link>
-          </li> */}
-          {/* <li className="border-top my-3"></li> */}
-          <hr/>
+          <hr />
           <li className="mb-1">
             <button
               className="btn btn-toggle align-items-center rounded collapsed"
               data-bs-toggle="collapse"
-              data-bs-target="#dashboard-collapse"
+              data-bs-target="#job-collapse"
+              aria-expanded="false"
+            >
+              Jobs
+            </button>
+            <div className="collapse" id="job-collapse">
+              <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                <li>
+                  <Link to="/jobs/add-job" className="rounded">
+                    Add New
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/jobs/view-job" className="rounded">
+                    View
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <hr />
+          <li className="mb-1">
+            <button
+              className="btn btn-toggle align-items-center rounded collapsed"
+              data-bs-toggle="collapse"
+              data-bs-target="#entertainment-collapse"
+              aria-expanded="false"
+            >
+              Entertainment
+            </button>
+            <div className="collapse" id="entertainment-collapse">
+              <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                <li>
+                  <Link to="/entertainment/add-ent" className="rounded">
+                    Add New
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/entertainment/view-ent" className="rounded">
+                    View
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <hr />
+          <li className="mb-1">
+            <button
+              className="btn btn-toggle align-items-center rounded collapsed"
+              data-bs-toggle="collapse"
+              data-bs-target="#blog-collapse"
+              aria-expanded="false"
+            >
+              Blogs
+            </button>
+            <div className="collapse" id="blog-collapse">
+              <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                <li>
+                  <Link to="/blogs/add-blog" className="rounded">
+                    Add New
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/blogs/view-blog" className="rounded">
+                    View
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <hr />
+          <li className="mb-1">
+            <button
+              className="btn btn-toggle align-items-center rounded collapsed"
+              data-bs-toggle="collapse"
+              data-bs-target="#news-collapse"
+              aria-expanded="false"
+            >
+              News
+            </button>
+            <div className="collapse" id="news-collapse">
+              <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                <li>
+                  <Link to="/news/add-news" className="rounded">
+                    Add New
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/news/view-news" className="rounded">
+                    View
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <hr />
+
+          <li className="mb-1">
+            <button
+              className="btn btn-toggle align-items-center rounded collapsed"
+              data-bs-toggle="collapse"
+              data-bs-target="#roles-collapse"
               aria-expanded="false"
             >
               Roles & permissions
             </button>
-            <div className="collapse" id="dashboard-collapse">
+            <div className="collapse" id="roles-collapse">
               <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                 <li>
-                  <Link to="/roles-and-permissions/add-user" className="rounded">
+                  <Link
+                    to="/roles-and-permissions/add-user"
+                    className="rounded"
+                  >
                     Add User
                   </Link>
                 </li>
                 <li>
-                  <a href="#" className="rounded">
+                  <Link
+                    to="/roles-and-permissions/view-user"
+                    className="rounded"
+                  >
                     View User
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>

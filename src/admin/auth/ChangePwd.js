@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -7,8 +7,10 @@ import "react-toastify/dist/ReactToastify.css";
 import { validate } from "../../shared/utils/validator";
 
 import "../../assets/css/profile.css";
+import { AuthContext } from "../../shared/context/auth-context";
 
 const ChangePwd = () => {
+  const auth = useContext(AuthContext);
   const [reset, setReset] = useState({
     password: "",
     repassword: "",
@@ -39,6 +41,7 @@ const ChangePwd = () => {
 
   const sendRequest = async () => {
     try {
+      auth.logout();
       const res = await axios.patch(
         `http://localhost:8000/api/admin/changepwd/${userId}`,
         {
